@@ -1,0 +1,34 @@
+---
+
+- name: Install Apache and Upload my Web Page
+  hosts: Server_Centos
+  become: yes
+
+  vars:
+    source_file: ./MyWebSite/index.html
+    dest_file: /var/www/html
+
+  tasks:
+  - name: Install Apache Web Server
+    yum:
+      name: httpd
+      state: latest
+    
+  - name: Copy MyHomePage to Servers
+    copy: 
+      src: "{{ source_file  }}"
+      dest: "{{ dest_file  }}"
+      mode: 0555
+    notify: Restart Apache
+ 
+  - name: Start Webserver and make enable on booy
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+   
+  handlers:
+  - name: Restart Apache
+    service:
+      name: httpd
+      state: restarted
