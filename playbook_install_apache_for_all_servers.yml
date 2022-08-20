@@ -1,0 +1,71 @@
+- name: Install Apache and Upload my Web Page
+  hosts: all
+  become: yes
+
+  vars:
+    source_file: ./MyWebSite/index.html
+    dest_file: /var/www/html
+
+  tasks:
+
+  - name: Check and Print Linux version
+    debug:
+      var: ansible_os_family
+
+
+
+  - block: # ========== Block for Debian ==========
+
+      - name: Install Apache Web Server for Debian
+        apt:
+          name: apache2
+          state: latest
+         
+      - name: Copy MyHomePage to Servers
+        copy:
+          src: "{{ source_file  }}"
+          dest: "{{ dest_file  }}"
+          mode: 0555
+        notify: Restart Apache Debian
+
+      - name: Start Webserver and make enable on boot (Debian)
+        service:
+          name: apache2
+          state: started
+          enabled: yes
+    when: ansible_os_family == "Debian"
+
+
+  - block: # ========== Block for RedHat ==========
+ 
+      - name: Install Apache Web Server for RedHat
+        yum:
+          name: httpd
+          state: latest
+    
+
+      - name: Copy MyHomePage to Servers
+        copy:
+          src: "{{ source_file  }}"
+          dest: "{{ dest_file  }}"
+          mode: 0555
+        notify: Restart Apache RedHat
+
+      - name: Start Webserver and make enable on boot (RedHat) 
+        service:
+          name: httpd
+          state: started
+          enabled: yes
+    when: ansible_os_family == "RedHat"
+
+
+  handlers:
+  - name: Restart Apache Debian
+    service:
+      name: apache
+      state: restarted
+
+  - name: Restart Apache RedHat
+    service:
+      name: httpd
+      state: restarted 
