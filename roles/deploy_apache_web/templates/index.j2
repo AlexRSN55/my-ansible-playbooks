@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>Ansible</title>
+</head>
+<body bgcolor=" yellow">
+ <center><h1>Hello from ansible</h1></center>
+<br/><br/>
+<center><font color="red">Owner of this server is: {{ owner }}</center><br/>
+<center><font color="green" size="5" >Ansible Roles</center><br/>
+<center> 
+<img src="fanta.png" width = 160 height = 120><img src="beatles.png" width = 160 height = 120>
+<img src="apple.png" width = 160 height = 120><img src="nike.png" width = 160 height = 120>
+</center>
+<br/><br/>
+Server Host Name : {{ ansible_hostname }}<br>
+Server OS Family is : {{ ansible_os_family }}<br>
+IP Address of This Server is : {{ ansible_default_ipv4.address }}<br>
+
+</body>
+</html>
