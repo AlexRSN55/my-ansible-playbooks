@@ -1,0 +1,29 @@
+---
+
+- name: Ansible ErroreHandling
+  hosts: all
+  any_errors_fatal: true
+  become: yes
+
+
+  tasks:
+  
+  - name: Task Number 1
+    yum:
+      name: treeeee
+      state: latest
+    when: ansible_os_family == "RedHat" 
+    ignore_errors: yes  
+   
+  - name: Task Number 2
+    shell: echo "Hello World!"
+    register: results
+#    failed_when: results.rc == 0
+#    failed_when: "'World' in results.stdout "    
+    
+  - debug:
+      var: results  
+
+  - name: Task Number 
+    shell: echo "Privet Mir!"
+
