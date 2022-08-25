@@ -1,0 +1,34 @@
+---
+
+- name: my Playbook Vault
+  hosts: Server_Centos
+  become: yes
+
+  vars:
+    admin_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          65373839376166363961333334313232636131633739623661643235326265633236323062316531
+          3636613631633635643065316261616465386234613866390a316432653266376565316438323262
+          64626138313065353134353361323032333634343039636133333635363739616333633365303434
+          6361376434316635300a363662643330643131393831313033386437393835353736623636633433
+          3433
+          
+
+
+  tasks:
+  
+  - name: INstall  Package Tree
+    yum:
+      name: tree
+      state: latest
+      
+
+  - name: Create Config File
+    copy:
+      dest: /root/myconfig.conf
+      content:
+        port = 9092
+        log = 7 days
+        home = opt/kafka/bin
+        user = root
+        password =  "{{ admin_password }}"
